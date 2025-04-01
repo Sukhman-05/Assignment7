@@ -12,7 +12,7 @@ df = pd.DataFrame({
 })
 
 app = dash.Dash()
-
+server = app.server
 app.layout = html.Div([
     html.H1("FIFA World Cup Winners"),
         dcc.Dropdown(['Overview', 'Check by year', 'Check how many times each country has won'], placeholder="Select option (ex. Overview)", id='dropdown-selection'),
