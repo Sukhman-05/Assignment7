@@ -3,6 +3,7 @@ from dash import dcc, html, callback, Input, Output
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
+import os
 
 df = pd.DataFrame({
     "Winner" : ["Uruguay", "Italy", "Italy", "Uruguay", "Germany", "Brazil", "Brazil", "Great Britain", "Brazil", "Germany", "Argentina", "Italy", "Argentina", "Germany", "Brazil", "France", "Brazil", "Italy", "Spain", "Germany", "France", "Argentina" ], 
@@ -85,4 +86,5 @@ def update_graph(value, year, country):
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     return fig
 
+app.run_server(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
 app.run(debug=True)
