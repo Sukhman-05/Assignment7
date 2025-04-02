@@ -61,6 +61,7 @@ def update_graph(value, year, country):
     elif value == "Check how many times each country has won":
         if country:
             temp = df.loc[df["Winner"] == country]
+            win = df.loc[df["Winner"] == country, "Times Won"].unique()
             fig = px.choropleth(
                 temp,
                 locations = "Winner",
@@ -68,7 +69,7 @@ def update_graph(value, year, country):
                 hover_data={"Times Won":True},
                 color = "Winner",
                 scope = "world",
-                title = f"{country} has won {df.loc[df["Winner"] == country, "Times Won"].unique().astype(int)} time(s)"
+                title = f"{country} has won {win.astype(int)} time(s)"
             )
             fig.update_layout(showlegend=False)
         else:
