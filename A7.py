@@ -57,18 +57,38 @@ def update_graph(value, year, country):
         fig2.update_traces(name="Runner up", legendgroup="group2", showlegend=True)
         fig.add_trace(fig2.data[0])
         fig.update_layout(legend_title_text='Finals Participants')
+        fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     elif value == "Check how many times each country has won":
         if country:
             temp = df.loc[df["Winner"] == country]
+            fig = px.choropleth(
+                temp,
+                locations = "Winner",
+                locationmode="country names",
+                hover_data={"Times Won":True},
+                color = "Winner",
+                scope = "world",
+                title = f"{country} has won {df.loc[df["Winner"] == country, "Times Won"].unique().astype(int)} time(s)"
+            )
+            fig.update_layout(showlegend=False)
         else:
-            temp = df.loc[df["Winner"] == "Italy"]
-        fig = px.choropleth(
-            temp,
-            locations = "Winner",
-            locationmode="country names",
-            color = "Winner",
-            scope = "world",
-        )
+            df["Times Won"] = df["Times Won"].astype(str)
+            fig = px.choropleth(
+                df.sort_values("Times Won"),
+                locations = "Winner",
+                locationmode="country names",
+                color = "Times Won",
+                hover_data={"Times Won":True},
+                scope = "world",
+                color_discrete_map={
+                            "1": "red",
+                            "2": "blue",
+                            "3": "green",
+                            "4": "yellow",
+                            "5": "black"
+                        }
+            )
+            fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     else:
         fig = px.choropleth(
             df,
@@ -78,12 +98,10 @@ def update_graph(value, year, country):
             color_continuous_scale = "Viridis",
             hover_data={"Times Won":True},
             scope = "world",
-            #title = "FIFA World Cup Winners",
         )
         fig.update_layout(legend_title_text='Winners over the years')
-    fig.update_layout(width=1100, height=522)
+        fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     fig.update_geos(showcountries=True, showcoastlines=False, showland=True, fitbounds="geojson")
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
     return fig
 
 app.run_server(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
